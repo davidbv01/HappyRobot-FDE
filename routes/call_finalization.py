@@ -1,0 +1,31 @@
+from fastapi import APIRouter, HTTPException, Depends, Request
+from pydantic import BaseModel
+from typing import Optional
+from functions.call_service import CallService
+from auth import verify_api_key_header
+
+router = APIRouter()
+
+class CallFinalizationRequest(BaseModel):
+    mc_number: str
+    company_name: str
+    load_id: str
+    final_price: float
+    negotiation_rounds: int
+    dialogue_summary: str
+    transcript: str
+
+@router.post("/finalize_call")
+async def finalize_call(
+    request_body: CallFinalizationRequest,
+    user_info: dict = Depends(verify_api_key_header),
+    request: Request = None
+):
+    if request is not None:
+        print("Headers received in /finalize_call:", dict(request.headers))
+    try:
+        call_service = CallService()
+        result = await call_service.process_call_finalization(request_body)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error finalizing call: {str(e)}") 

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
-from pydantic import BaseModel, root_validator
+from pydantic import BaseModel, model_validator
 from typing import Optional
 from functions.call_service import CallService
 from auth import verify_api_key_header
@@ -22,13 +22,11 @@ class CallNoDealRequest(BaseModel):
     reason: str  # mc_incorrecto, no_acuerdo_precio, no_interesado
     transcript: str
 
-    @root_validator
-    def check_load_id_for_reason(cls, values):
-        reason = values.get('reason')
-        load_id = values.get('load_id')
-        if reason != 'mc_incorrecto' and not load_id:
+    @model_validator(mode='after')
+    def check_load_id_for_reason(self):
+        if self.reason != 'mc_incorrecto' and not self.load_id:
             raise ValueError('load_id is required unless reason is mc_incorrecto')
-        return values
+        return self
 
 @router.post("/finalize_call")
 async def finalize_call(

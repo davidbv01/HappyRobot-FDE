@@ -30,37 +30,37 @@ class CallNoDealRequest(BaseModel):
             raise ValueError('load_id is required unless reason is mc_incorrecto or acuerdo_cerrado')
         return self
 
-@router.post("/save_deal")
-async def save_deal(
+@router.post("/deals")
+async def create_deal(
     request_body: CallFinalizationRequest,
     user_info: dict = Depends(verify_api_key_header),
     request: Request = None
 ):
     if request is not None:
-        print("Headers received in /save_deal:", dict(request.headers))
+        print("Headers received in /deals:", dict(request.headers))
     try:
         call_service = CallService()
         result = await call_service.process_call_finalization(request_body)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error saving deal: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating deal: {str(e)}")
 
-@router.post("/finalize_call")
-async def finalize_call(
+@router.post("/calls")
+async def create_call(
     request_body: CallNoDealRequest,
     user_info: dict = Depends(verify_api_key_header),
     request: Request = None
 ):
     if request is not None:
-        print("Headers received in /finalize_call:", dict(request.headers))
+        print("Headers received in /calls:", dict(request.headers))
     try:
         call_service = CallService()
         result = await call_service.process_call_no_deal(request_body)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error finalizing call: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating call: {str(e)}")
 
-@router.get("/get_calls")
+@router.get("/calls")
 async def get_calls(user_info: dict = Depends(verify_api_key_header)):
     temp_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "temp")
     calls = []

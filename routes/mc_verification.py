@@ -1,12 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi import APIRouter, HTTPException, Path, Depends
 from functions.mc_service import MCService
 from auth import verify_api_key_header
 
 router = APIRouter()
 
-@router.get("/verify_mc")
-async def verify_mc(
-    mc_number: str = Query(..., description="MC Number del carrier"),
+@router.get("/carriers/{mc_number}")
+async def get_carrier(
+    mc_number: str = Path(..., description="MC Number del carrier"),
     user_info: dict = Depends(verify_api_key_header)
 ):
     """

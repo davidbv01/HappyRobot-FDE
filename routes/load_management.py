@@ -5,7 +5,7 @@ from auth import verify_api_key_header
 
 router = APIRouter()
 
-@router.get("/get_best_load")
+@router.get("/loads/best")
 async def get_best_load(
     equipment_type: Optional[str] = Query(None, description="Tipo de camión"),
     user_info: dict = Depends(verify_api_key_header)

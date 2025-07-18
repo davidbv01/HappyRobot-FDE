@@ -10,7 +10,7 @@ class LoadService:
     def __init__(self):
         self.mock_loads = self._generate_mock_loads()
 
-    def euros_a_texto(euros: int) -> str:
+    def euros_to_text(self, euros: int) -> str:
         texto = num2words(euros, lang='es')
         return f"{texto} euros"
     
@@ -26,9 +26,9 @@ class LoadService:
             pickup_date = datetime.now() + timedelta(days=random.randint(1, 7))
             delivery_date = pickup_date + timedelta(days=random.randint(1, 3))
             loadboard_rate = random.randint(1800, 3500)
-            loadboard_rate_text = self.euros_to_text(loadboard_rate)
+            loadboard_rate_text = self.euros_to_text(euros=loadboard_rate)
             loadboard_max_rate = loadboard_rate + random.randint(100, 500)
-            loadboard_max_rate_text = self.euros_to_text(loadboard_max_rate)
+            loadboard_max_rate_text = self.euros_to_text(euros=loadboard_max_rate)
 
             load = {
                 "load_id": f"L{1000 + i}",

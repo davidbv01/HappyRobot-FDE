@@ -2,12 +2,17 @@ import random
 import asyncio
 from typing import Dict, Any, Optional
 from datetime import datetime, timedelta
+from num2words import num2words
 
 class LoadService:
     """Service for handling load management and selection"""
     
     def __init__(self):
         self.mock_loads = self._generate_mock_loads()
+
+    def euros_a_texto(euros: int) -> str:
+        texto = num2words(euros, lang='es')
+        return f"{texto} euros"
     
     def _generate_mock_loads(self) -> list:
         """Generate mock load data for demonstration"""
@@ -21,7 +26,10 @@ class LoadService:
             pickup_date = datetime.now() + timedelta(days=random.randint(1, 7))
             delivery_date = pickup_date + timedelta(days=random.randint(1, 3))
             loadboard_rate = random.randint(1800, 3500)
+            loadboard_rate_text = self.euros_to_text(loadboard_rate)
             loadboard_max_rate = loadboard_rate + random.randint(100, 500)
+            loadboard_max_rate_text = self.euros_to_text(loadboard_max_rate)
+
             load = {
                 "load_id": f"L{1000 + i}",
                 "origin": random.choice(origins),
@@ -30,7 +38,9 @@ class LoadService:
                 "delivery_datetime": delivery_date.strftime("%Y-%m-%dT%H:%M:%S"),
                 "equipment_type": random.choice(equipment_types),
                 "loadboard_rate": loadboard_rate,
+                "loadboard_rate_text": loadboard_rate_text,
                 "loadboard_max_rate": loadboard_max_rate,
+                "loadboard_max_rate_text": loadboard_max_rate_text,
                 "notes": "Easy dock access",
                 "weight": random.randint(25000, 45000),
                 "commodity_type": random.choice(commodities),
@@ -94,46 +104,3 @@ class LoadService:
                 "dimensions": "48x40x60"
             }
     
-    async def get_loads_by_criteria(self, equipment_type: str = None, 
-                                   origin: str = None, 
-                                   destination: str = None,
-                                   min_rate: float = None) -> list:
-        """
-        Get loads based on multiple criteria (for future enhancement)
-        
-        Args:
-            equipment_type (str): Equipment type filter
-            origin (str): Origin location filter
-            destination (str): Destination location filter
-            min_rate (float): Minimum rate filter
-            
-        Returns:
-            list: List of matching loads
-        """
-        filtered_loads = self.mock_loads.copy()
-        
-        if equipment_type:
-            filtered_loads = [
-                load for load in filtered_loads 
-                if load["equipment_type"].lower() == equipment_type.lower()
-            ]
-        
-        if origin:
-            filtered_loads = [
-                load for load in filtered_loads 
-                if origin.lower() in load["origin"].lower()
-            ]
-        
-        if destination:
-            filtered_loads = [
-                load for load in filtered_loads 
-                if destination.lower() in load["destination"].lower()
-            ]
-        
-        if min_rate:
-            filtered_loads = [
-                load for load in filtered_loads 
-                if load["loadboard_rate"] >= min_rate
-            ]
-        
-        return filtered_loads 

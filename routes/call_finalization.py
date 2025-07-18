@@ -10,8 +10,10 @@ class CallFinalizationRequest(BaseModel):
     mc_number: str
     company_name: str
     load_id: str
+    initial_offer: float
     final_price: float
     negotiation_rounds: int
+    deal_accepted: bool
     dialogue_summary: str
     transcript: str
 

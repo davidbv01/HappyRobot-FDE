@@ -36,8 +36,7 @@ async def create_deal(
     user_info: dict = Depends(verify_api_key_header),
     request: Request = None
 ):
-    if request is not None:
-        print("Headers received in /deals:", dict(request.headers))
+    
     try:
         call_service = CallService()
         result = await call_service.process_call_finalization(request_body)
@@ -51,8 +50,6 @@ async def create_call(
     user_info: dict = Depends(verify_api_key_header),
     request: Request = None
 ):
-    if request is not None:
-        print("Headers received in /calls:", dict(request.headers))
     try:
         call_service = CallService()
         result = await call_service.process_call_no_deal(request_body)

@@ -17,7 +17,6 @@ class CallService:
         Process and analyze call finalization data
         """
         try:
-            # Save the input JSON to a file in /temp
             await self._save_json_to_file(call_data)
             await asyncio.sleep(0.2)
             try:
@@ -32,10 +31,6 @@ class CallService:
             summary = {
                 "mc_number": call_data.mc_number,
                 "company_name": call_data.company_name,
-                "origin": call_data.origin,
-                "destination": call_data.destination,
-                "pickup_datetime": call_data.pickup_datetime,
-                "delivery_datetime": call_data.delivery_datetime,
                 "load_id": call_data.load_id,
                 "initial_offer": initial_offer,
                 "final_price": final_price,
@@ -67,11 +62,7 @@ class CallService:
             summary = {
                 "mc_number": call_data.mc_number,
                 "company_name": call_data.company_name,
-                "origin": call_data.origin,
-                "destination": call_data.destination,
-                "pickup_datetime": call_data.pickup_datetime,
-                "delivery_datetime": call_data.delivery_datetime,
-                "load_id": call_data.load_id,
+                "load_id": getattr(call_data, "load_id", None),
                 "reason": call_data.reason,
                 "processed_at": datetime.now().isoformat(),
             }

@@ -25,24 +25,31 @@ class LoadService:
         for i in range(1, 21):  # Generate 20 mock loads
             pickup_date = datetime.now() + timedelta(days=random.randint(1, 7))
             delivery_date = pickup_date + timedelta(days=random.randint(1, 3))
-            loadboard_rate = random.randint(1800, 3500)
+            # Generate loadboard_rate and max_rate as multiples of 100
+            loadboard_rate = random.randint(18, 35) * 100
             loadboard_rate_text = self.euros_to_text(euros=loadboard_rate)
-            loadboard_max_rate = loadboard_rate + random.randint(100, 500)
+            loadboard_max_rate = loadboard_rate + random.randint(1, 5) * 100
             loadboard_max_rate_text = self.euros_to_text(euros=loadboard_max_rate)
+            # Generate weight as a multiple of 100
+            weight = random.randint(250, 450) * 100
+
+            # Format pickup and delivery datetime as 'DD-MM HH:MM'
+            pickup_str = pickup_date.strftime("%d-%m %H:%M")
+            delivery_str = delivery_date.strftime("%d-%m %H:%M")
 
             load = {
                 "load_id": f"L{1000 + i}",
                 "origin": random.choice(origins),
                 "destination": random.choice(destinations),
-                "pickup_datetime": pickup_date.strftime("%Y-%m-%dT%H:%M:%S"),
-                "delivery_datetime": delivery_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                "pickup_datetime": pickup_str,
+                "delivery_datetime": delivery_str,
                 "equipment_type": random.choice(equipment_types),
                 "loadboard_rate": loadboard_rate,
                 "loadboard_rate_text": loadboard_rate_text,
                 "loadboard_max_rate": loadboard_max_rate,
                 "loadboard_max_rate_text": loadboard_max_rate_text,
                 "notes": "Easy dock access",
-                "weight": random.randint(25000, 45000),
+                "weight": weight,
                 "commodity_type": random.choice(commodities),
                 "num_of_pieces": random.randint(10, 50),
                 "miles": random.randint(500, 1200),

@@ -9,12 +9,13 @@ router = APIRouter()
 class CallFinalizationRequest(BaseModel):
     mc_number: str
     company_name: str
+    origin: str
+    destination: str
+    pickup_datetime: str
+    delivery_datetime: str
     load_id: str
-    initial_offer: float
-    final_price: float
-    negotiation_rounds: int
-    deal_accepted: bool
-    dialogue_summary: str
+    final_price: str
+    negotiation_rounds: str
     transcript: str
 
 @router.post("/finalize_call")

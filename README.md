@@ -121,8 +121,3 @@ See `/docs` for full OpenAPI documentation.
 - Change default API keys in production
 - Never commit your `.env` with real secrets
 - Use HTTPS and a reverse proxy in production
-
----
-
-## License
-MIT (or your license here) 

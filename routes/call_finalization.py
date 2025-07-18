@@ -45,20 +45,20 @@ async def save_deal(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error saving deal: {str(e)}")
 
-@router.post("/finalize_call_no_deal")
-async def finalize_call_no_deal(
+@router.post("/finalize_call")
+async def finalize_call(
     request_body: CallNoDealRequest,
     user_info: dict = Depends(verify_api_key_header),
     request: Request = None
 ):
     if request is not None:
-        print("Headers received in /finalize_call_no_deal:", dict(request.headers))
+        print("Headers received in /finalize_call:", dict(request.headers))
     try:
         call_service = CallService()
         result = await call_service.process_call_no_deal(request_body)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error finalizing call (no deal): {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error finalizing call: {str(e)}")
 
 @router.get("/get_calls")
 async def get_calls(user_info: dict = Depends(verify_api_key_header)):
